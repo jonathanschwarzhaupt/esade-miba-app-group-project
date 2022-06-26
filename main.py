@@ -18,9 +18,10 @@ menu_state = "main"
 head_font = pygame.font.SysFont("arialblack", 20, italic=False)
 
 #define colours
-TEXT_COL = (255, 255, 255)
+TEXT_COL = (0, 0, 0)
 
 #load button images
+start_img = pygame.image.load("images/button_start.png").convert_alpha()
 resume_img = pygame.image.load("images/button_resume.png").convert_alpha()
 options_img = pygame.image.load("images/button_options.png").convert_alpha()
 quit_img = pygame.image.load("images/button_quit.png").convert_alpha()
@@ -28,15 +29,33 @@ video_img = pygame.image.load('images/button_video.png').convert_alpha()
 audio_img = pygame.image.load('images/button_audio.png').convert_alpha()
 keys_img = pygame.image.load('images/button_keys.png').convert_alpha()
 back_img = pygame.image.load('images/button_back.png').convert_alpha()
+logo_img = pygame.image.load('images/logo2.jpg').convert_alpha()
+
+sphere_img = pygame.image.load('images/sphere_img.png').convert_alpha()
+cone_img = pygame.image.load('images/cone_img.png').convert_alpha()
+hexagon_img = pygame.image.load('images/hexagon_img.png').convert_alpha()
+pentagon_img = pygame.image.load('images/pentagon_img.png').convert_alpha()
+square_img = pygame.image.load('images/square_img.png').convert_alpha()
+triangle_img = pygame.image.load('images/triangle_img.png').convert_alpha()
+
 
 #create button instances
-resume_button = button.Button(304, 125, resume_img, 1)
-options_button = button.Button(297, 250, options_img, 1)
-quit_button = button.Button(336, 375, quit_img, 1)
-video_button = button.Button(226, 75, video_img, 1)
-audio_button = button.Button(225, 200, audio_img, 1)
-keys_button = button.Button(246, 325, keys_img, 1)
-back_button = button.Button(332, 450, back_img, 1)
+start_button = button.Button(370, 500, start_img, 1)
+resume_button = button.Button(350, 200, resume_img, 1)
+options_button = button.Button(350, 350, options_img, 1)
+quit_button = button.Button(350, 500, quit_img, 1)
+video_button = button.Button(300, 150, video_img, 1)
+audio_button = button.Button(300, 300, audio_img, 1)
+keys_button = button.Button(300, 450, keys_img, 1)
+back_button = button.Button(300, 600, back_img, 1)
+
+sphere_button = button.Button(200, 350, sphere_img, 1)
+cone_button = button.Button(425, 350, cone_img, 1)
+hexagon_button = button.Button(650, 350, hexagon_img, 1)
+pentagon_button = button.Button(200, 450, pentagon_img, 1)
+square_button = button.Button(425, 450, square_img, 1)
+triangle_button = button.Button(650, 450, triangle_img, 1)
+
 
 def draw_text(text, font, text_col, x, y):
   img = font.render(text, True, text_col)
@@ -44,9 +63,33 @@ def draw_text(text, font, text_col, x, y):
 
 #game loop
 run = True
+menu_state = 'init'
 while run:
 
-  screen.fill((0, 0, 0))
+  screen.fill((255, 255, 255))
+
+  #initial menu
+  if menu_state == 'init':
+    screen.blit(logo_img, (100, 100))
+    if start_button.draw(screen):
+      menu_state = "game"
+
+  #game loop
+  if menu_state == "game":
+    screen.fill((255, 255, 255))
+    draw_text("Select the geometric shape of the figure", head_font, TEXT_COL, 250, 200)
+    if sphere_button.draw(screen):
+      print("Rectangle function")
+    if cone_button.draw(screen):
+      print("Cone function")
+    if hexagon_button.draw(screen):
+      print("Hexagon function")
+    if pentagon_button.draw(screen):
+      print("Hexagon function")
+    if square_button.draw(screen):
+      print("Square function")
+    if triangle_button.draw(screen):
+      print("Triangle function")
 
   #check if game is paused
   if game_paused == True:
@@ -71,12 +114,13 @@ while run:
       if back_button.draw(screen):
         menu_state = "main"
   #else:
-
+    
 
   #event handler
   for event in pygame.event.get():
     if event.type == pygame.KEYDOWN:
       if event.key == pygame.K_SPACE:
+        menu_state = "main"
         game_paused = True
     if event.type == pygame.QUIT:
       run = False
