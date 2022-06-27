@@ -9,6 +9,7 @@ SCREEN_HEIGHT = 800
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("ESADE - Geometric Game")
+pygame.display.set_icon(pygame.image.load("images/logo_icon.png"))
 
 #game variables
 game_paused = False
