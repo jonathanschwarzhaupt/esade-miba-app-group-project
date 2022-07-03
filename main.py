@@ -1,8 +1,12 @@
 import pygame
 import button
 import InputBox
+import music
 
 pygame.init()
+
+#load music
+music.play_music('music.mp3')
 
 #create game window
 SCREEN_WIDTH = 900
