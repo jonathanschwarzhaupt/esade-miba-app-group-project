@@ -7,6 +7,8 @@ COLOR_INACTIVE = pygame.Color('lightskyblue3')
 COLOR_ACTIVE = pygame.Color('dodgerblue2')
 FONT = pygame.font.Font(None, 32)
 
+input1 = []
+input2 = []
 
 #class InputBox
 class InputBox:
@@ -31,7 +33,9 @@ class InputBox:
         if event.type == pygame.KEYDOWN:
             if self.active:
                 if event.key == pygame.K_RETURN:
-                    print(self.text)
+                    global input1 
+                    input1.append(int(self.text))
+                    print(input1)
                     self.text = ''
                 elif event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
@@ -50,5 +54,3 @@ class InputBox:
         screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
         # Blit the rect.
         pygame.draw.rect(screen, self.color, self.rect, 2)
-
-pygame.quit()

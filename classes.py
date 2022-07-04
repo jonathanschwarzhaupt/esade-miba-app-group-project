@@ -4,6 +4,7 @@
 # Import statements
 import math 
 
+
 class Shape:
     '''Base class for consequent shapes, specifies color'''
 
@@ -66,21 +67,22 @@ class Rectangle(Shape):
 
 class Circle(Shape):
     '''Subclass for circle with functionality to calculate area and print its equation'''
-    def __init__(self, color: str, radius: int) -> None:
-        super().__init__(color)
+    def __init__(self, radius: int) -> None:
         self.radius = radius
         self.diameter = radius * 2
         self.type = "circle"
 
     def area(self):
         '''Calculates the area of a circle'''
-        area = math.pi * self.radius ** 2
+        area = math.pi * self ** 2
         return area
     
-    def formula(self):
+    def formula():
         '''Prints the equation to calculate the area of a circle'''
         equation = "A = pi * radius^2"
         return f"The area of a circle is calculated by: {equation}"
+
+    
 
 
 if __name__ == "__main__":
