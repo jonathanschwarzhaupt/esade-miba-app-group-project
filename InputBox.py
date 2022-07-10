@@ -3,7 +3,7 @@ import pygame
 pygame.init()
 
 #Extra parameters
-COLOR_INACTIVE = pygame.Color('lightskyblue3')
+COLOR_INACTIVE = pygame.Color('black')
 COLOR_ACTIVE = pygame.Color('dodgerblue2')
 FONT = pygame.font.Font(None, 32)
 

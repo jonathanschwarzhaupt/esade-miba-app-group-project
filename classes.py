@@ -30,17 +30,16 @@ class Shape:
 
 class Square(Shape):
     '''Subclass for square with functionality to calculate area and print its equation'''
-    def __init__(self, color: str, length: int) -> None:
-        super().__init__(color)
+    def __init__(self, length: int) -> None:
         self.length = length
         self.type = "square"
 
-    def area(self):
+    def area(length):
         '''Calculates the area of a square'''
-        area = self.length * self.length
+        area = length * length
         return area
 
-    def formula(self):
+    def formula():
         '''Prints the equation to calculate the area of a square'''
         equation = "A = a*a"
         return f"The area of a square is calculated by: {equation}"
@@ -48,21 +47,20 @@ class Square(Shape):
 
 class Rectangle(Shape):
     '''Subclass for rectangle with functionality to calculate area and print its equation'''
-    def __init__(self, color: str, length: int, width: int) -> None:
-        super().__init__(color)
+    def __init__(self, length: int, width: int) -> None:
         self.length = length
         self.width = width
         self.type = "rectangle"
     
-    def area(self):
+    def area(length, width):
         '''Calculates the area of a rectangle'''
-        area = self.length * self.width
+        area = length * width
         return area
 
-    def formula(self):
+    def formula():
         '''Prints the equation to calculate the area of a rectangle'''
-        equation = "A = a*a"
-        return f"The area of a square is calculated by: {equation}"
+        equation = "A = length * width"
+        return f"The area of a rectangle is calculated by: {equation}"
 
 
 class Circle(Shape):
@@ -72,15 +70,67 @@ class Circle(Shape):
         self.diameter = radius * 2
         self.type = "circle"
 
-    def area(self):
+    def area(radius):
         '''Calculates the area of a circle'''
-        area = math.pi * self ** 2
+        area = math.pi * radius ** 2
         return area
     
     def formula():
         '''Prints the equation to calculate the area of a circle'''
         equation = "A = pi * radius^2"
         return f"The area of a circle is calculated by: {equation}"
+
+class Cone(Shape):
+    '''Subclass for cone with functionality to calculate area and print its equation'''
+    def __init__(self, radius: int, height: int) -> None:
+        self.radius = radius
+        self.height = height
+        self.diameter = radius * 2
+        self.type = "cone"
+
+    def area(radius, height):
+        '''Calculates the area of a cone'''
+        area = math.pi * radius * (radius + math.sqrt(height**2+radius**2))
+        return area
+    
+    def formula():
+        '''Prints the equation to calculate the area of a cone'''
+        equation = "A = πr(r+h2+r2)"
+        return f"The area of a cone is calculated by: {equation}"
+
+class Triangle(Shape):
+    '''Subclass for triangle with functionality to calculate area and print its equation'''
+    def __init__(self, base: int, height: int) -> None:
+        self.base = base
+        self.height = height
+        self.type = "triangle"
+
+    def area(base, height):
+        '''Calculates the area of a triangle'''
+        area = 1/2 * base * height
+        return area
+    
+    def formula():
+        '''Prints the equation to calculate the area of a triangle'''
+        equation = "A = 1/2 * b * h"
+        return f"The area of a triangle is calculated by: {equation}"
+
+class Pentagon(Shape):
+    '''Subclass for pentagon with functionality to calculate area and print its equation'''
+    def __init__(self, perimeter: int, apothem: int) -> None:
+        self.perimeter = perimeter
+        self.apothem = apothem
+        self.type = "pentagon"
+
+    def area(perimeter, apothem):
+        '''Calculates the area of a pentagon'''
+        area = 1/2 * perimeter * apothem
+        return area
+    
+    def formula():
+        '''Prints the equation to calculate the area of a pentagon'''
+        equation = "A = 1/2 * p * a"
+        return f"The area of a pentagon is calculated by: {equation}"
 
     
 

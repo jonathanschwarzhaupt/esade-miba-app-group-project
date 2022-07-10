@@ -4,6 +4,7 @@ import InputBox
 import music
 import classes
 import Display
+import music
 
 pygame.init()
 
@@ -46,8 +47,7 @@ hexagon_img = pygame.image.load('images/hexagon_img.png').convert_alpha()
 pentagon_img = pygame.image.load('images/pentagon_img.png').convert_alpha()
 square_img = pygame.image.load('images/square_img.png').convert_alpha()
 triangle_img = pygame.image.load('images/triangle_img.png').convert_alpha()
-
-calculate_img = pygame.image.load('images/calculate_button.jpeg').convert_alpha()
+rectangle_img = pygame.image.load('images/rectangle_img.png').convert_alpha()
 
 #create button instances
 start_button = button.Button(370, 500, start_img, 1)
@@ -61,15 +61,11 @@ back_button = button.Button(300, 600, back_img, 1)
 
 sphere_button = button.Button(200, 350, sphere_img, 1)
 cone_button = button.Button(425, 350, cone_img, 1)
-hexagon_button = button.Button(650, 350, hexagon_img, 1)
 pentagon_button = button.Button(200, 450, pentagon_img, 1)
 square_button = button.Button(425, 450, square_img, 1)
 triangle_button = button.Button(650, 450, triangle_img, 1)
+rectangle_button = button.Button(650, 350, rectangle_img, 1)
 
-calculate_button = button.Button(100, 620, calculate_img, 0.5)
-
-#sphere misc.
-sphere_big = pygame.image.load('images/sphere_big.png').convert_alpha()
 
 def draw_text(text, font, text_col, x, y):
   img = font.render(text, True, text_col)
@@ -97,14 +93,19 @@ while run:
       Display.Display.sphere_event()
       print("Rectangle function")
     if cone_button.draw(screen):
+      Display.Display.cone_event()
       print("Cone function")
-    if hexagon_button.draw(screen):
-      print("Hexagon function")
+    if rectangle_button.draw(screen):
+      Display.Display.rectangle_event()
+      print("Rectangle function")
     if pentagon_button.draw(screen):
+      Display.Display.pentagon_event()
       print("Hexagon function")
     if square_button.draw(screen):
+      Display.Display.square_event()
       print("Square function")
     if triangle_button.draw(screen):
+      Display.Display.triangle_event()
       print("Triangle function")
 
   #check if game is paused
