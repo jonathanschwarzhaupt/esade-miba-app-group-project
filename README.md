@@ -5,3 +5,4 @@ When prompted with the possibility to create our own project, a lot of ideas eme
 
 From a user perspective, the programme is straight forward: users are given to choose amongst four 2D shapes, namely a square, a rectangle, a cone, or a circle. Upon selection, they will be prompted to enter the required dimensions, and by pressing a button “calculate” will be returned the area. Although this pro-gramme appears simple, it has allowed us to implement OOP concepts, such as Classes, Attributes & Inheritance. 
  
+Bryan, Jonathan and Carles have contributed to the main branch with the first programme, while Alissa contributed to the "Enhancement" project under the branch "Alissa"
