@@ -18,34 +18,6 @@ class Menu():
         pygame.display.update()
         self.game.reset_keys()
 
-class InputBox():
-    def __init__(self, x, y, w, h, text=''):
-        self.rect = pygame.Rect(x, y, w, h)
-        self.color_inactive = pygame.Color('red')
-        self.color_active = pygame.Color('white')
-        self.text = text
-        self.font = pygame.font.SysFont('monospace', 20,0)
-        self.txt_surface = self.font.render(text, True, self.color_active)
-        self.active = False
-        self.done = False
-    
-    def handle_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(event.pos):
-                self.active = not self.active
-            else:
-                self.active = False
-            self.color = self.color_active if self.active else self.color_inactive
-        if event.type == pygame.KEYDOWN:
-            if self.active:
-                if event.key == pygame.K_RETURN:
-                    print(self.text)
-                    self.done = True
-                elif event.key == pygame.K_BACKSPACE:
-                    self.text = self.text[:-1]
-                else:
-                    self.text += event.unicode
-            self.txt_surface = self.font.render(self.text, True, self.color)
         
     def update(self):
         width = max(180, self.txt_surface.get_width()+10)
@@ -170,7 +142,7 @@ class CreditsMenu(Menu):
                 self.run_display = False
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('Credits', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
-            self.game.draw_text('Made by me', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 10)
+            self.game.draw_text('Made by Group K', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 10)
             self.blit_screen()
 
 class ShapesMenu(Menu):
@@ -201,7 +173,6 @@ class ShapesMenu(Menu):
             self.blit_screen()
 
     def move_cursor(self):
-        self.move_cursor()
         if self.game.DOWN_KEY:
             if self.state == 'Square':
                 self.cursor_rect.midtop = (self.rectanglex + self.offset, self.rectangley)
@@ -231,22 +202,10 @@ class ShapesMenu(Menu):
                 self.state = "Square"
   
     def check_input(self):
+        self.move_cursor()
         if self.game.BACK_KEY:
             self.game.curr_menu = self.game.main_menu
             self.run_display = False
-        elif self.game.UP_KEY or self.game.DOWN_KEY:
-            if self.state == 'Square':
-                self.state = 'Rectangle'
-                self.cursor_rect.midtop = (self.rectanglex + self.offset, self.rectangley)
-            elif self.state == 'Rectangle':
-                self.state = 'Triangle'
-                self.cursor_rect.midtop = (self.trianglex + self.offset, self.triangley)
-            elif self.state == 'Triangle':
-                self.state = 'Circle'
-                self.cursor_rect.midtop = (self.circlex + self.offset, self.circley)
-            elif self.state == "Circle":
-                self.state = "Square"
-                self.cursor_rect.midtop = (self.squarex + self.offset, self.squarey)
         elif self.game.START_KEY:
             if self.state == 'Square':
                 self.game.curr_menu = self.game.square
@@ -266,10 +225,6 @@ class Square(Menu):
         self.sidex, self.sidey = self.mid_w  , self.mid_h +10 
         self.calcx, self.calcy = self.mid_w , self.mid_h +50
         self.cursor_rect.midtop = (self.sidex + self.offset, self.sidey)
-        
-    def __init__(self, x, y, w, h, text=''):
-        InputBox.__init__(x, y, w, h, text='')
-
 
     def display_menu(self):
         self.run_display = True
@@ -286,28 +241,39 @@ class Square(Menu):
             self.draw_cursor()
             self.blit_screen()
 
+    def move_cursor(self):
+        if self.game.DOWN_KEY:
+            if self.state == 'Side':
+                self.cursor_rect.midtop = (self.calcx + self.offset, self.calcy)
+                self.state = 'Calculate'
+            elif self.state == 'Calculate':
+                self.cursor_rect.midtop = (self.sidex + self.offset, self.sidey)
+                self.state = 'Side'
+        elif self.game.UP_KEY:
+            if self.state == 'Side':
+                self.cursor_rect.midtop = (self.calcx + self.offset, self.calcy)
+                self.state = 'Calculate'
+            elif self.state == 'Calculate':
+                self.cursor_rect.midtop = (self.sidex + self.offset, self.sidey)
+                self.state = 'Side'
+
 
     def check_input(self):
+        self.move_cursor()
         if self.game.BACK_KEY:
             self.game.curr_menu = self.game.shapes_menu
             self.run_display = False
-        elif self.game.UP_KEY or self.game.DOWN_KEY:
-            if self.state == 'Side':
-                self.state = 'Calculate'
-                self.cursor_rect.midtop = (self.calcx + self.offset, self.calcy)
-            elif self.state == 'Calculate':
-                self.state = 'Side'
-                self.cursor_rect.midtop = (self.sidex + self.offset, self.sidey)
+
 
     
 
 class Rectangle(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
-        self.state = 'Calculate'
+        self.state = 'Width'
         self.widthx, self.widthy = self.mid_w -80 , self.mid_h +10 
         self.heightx, self.heighty = self.mid_w -80, self.mid_h +50
-        self.calcx, self.calcy = self.mid_w+50, self.mid_h +80
+        self.calcx, self.calcy = self.mid_w-57, self.mid_h +80
         self.cursor_rect.midtop = (self.widthx + self.offset, self.widthy)
 
     def display_menu(self):
@@ -322,37 +288,49 @@ class Rectangle(Menu):
             self.game.draw_text('Input the values', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 40)
             self.game.draw_text('Width', 15, self.widthx, self.widthy )
             self.game.draw_text('Height', 15, self.heightx, self.heighty)
-            self.game.draw_text('Press enter to calculate',15, self.calcx, self.calcy)
+            self.game.draw_text('Calculate',15, self.calcx, self.calcy)
             self.draw_cursor()
             self.blit_screen()   
 
+    def move_cursor(self):
+        if self.game.DOWN_KEY:
+            if self.state == 'Width':
+                self.cursor_rect.midtop = (self.heightx + self.offset, self.heighty)
+                self.state = 'Height'
+            elif self.state == 'Height':
+                self.cursor_rect.midtop = (self.calcx -23+ self.offset, self.calcy)
+                self.state = 'Calculate'
+            elif self.state == 'Calculate':
+                self.cursor_rect.midtop = (self.widthx + self.offset, self.widthy)
+                self.state = 'Width'
+
+        elif self.game.UP_KEY:
+            if self.state == 'Width':
+                self.cursor_rect.midtop = (self.calcx -23+ self.offset, self.calcy)
+                self.state = 'Calculate'
+            elif self.state == 'Calculate':
+                self.cursor_rect.midtop = (self.heightx + self.offset, self.heighty)
+                self.state = 'Height'
+            elif self.state == 'Height':
+                self.cursor_rect.midtop = (self.widthx + self.offset, self.widthy)
+                self.state = 'Width'
+
 
     def check_input(self):
+        self.move_cursor()
         if self.game.BACK_KEY:
             self.game.curr_menu = self.game.shapes_menu
             self.run_display = False
-        elif self.game.UP_KEY or self.game.DOWN_KEY:
-            if self.state == 'Width':
-                self.state = 'Height'
-                self.cursor_rect.midtop = (self.heightx + self.offset, self.heighty)
-            elif self.state == 'Height':
-                self.state = 'Width'
-                self.cursor_rect.midtop = (self.widthx + self.offset, self.widthy)
-                self.run_display = False
-        elif self.game.START_KEY:           
-            if self.state == 'Width':
-                self.game.curr_menu = self.game.rectangle_width
-            elif self.state == 'Height':
-                self.game.curr_menu = self.game.rectangle_height
-            self.run_display = False
+
+
 
 class Triangle(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
-        self.state = 'Calculate'
+        self.state = 'Base'
         self.basex, self.basey = self.mid_w -80 , self.mid_h +10 
         self.heightx, self.heighty = self.mid_w -80, self.mid_h +50
-        self.calcx, self.calcy = self.mid_w+50, self.mid_h +80
+        self.calcx, self.calcy = self.mid_w -80, self.mid_h +70
         self.cursor_rect.midtop = (self.basex + self.offset, self.basey)
 
     def display_menu(self):
@@ -365,16 +343,42 @@ class Triangle(Menu):
             self.check_input()
             self.game.display.fill((0, 0, 0))
             self.game.draw_text('Input the values', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 40)
-            self.game.draw_text('Base', 15, self.basex, self.basey )
+            self.game.draw_text('Base', 15, self.basex-10, self.basey )
             self.game.draw_text('Height', 15, self.heightx, self.heighty)
-            self.game.draw_text('Press enter to calculate',15, self.calcx, self.calcy)
+            self.game.draw_text('Calculate',15, self.calcx+27, self.calcy)
             self.draw_cursor()
             self.blit_screen()   
 
+    def move_cursor(self):
+        if self.game.DOWN_KEY:
+            if self.state == 'Base':
+                self.cursor_rect.midtop = (self.heightx + self.offset, self.heighty)
+                self.state = 'Height'
+            elif self.state == 'Height':
+                self.cursor_rect.midtop = (self.calcx + self.offset, self.calcy)
+                self.state = 'Calculate'
+            elif self.state == 'Calculate':
+                self.cursor_rect.midtop = (self.basex + self.offset, self.basey)
+                self.state = 'Base'
+
+        elif self.game.UP_KEY:
+            if self.state == 'Base':
+                self.cursor_rect.midtop = (self.calcx + self.offset, self.calcy)
+                self.state = 'Calculate'
+            elif self.state == 'Calculate':
+                self.cursor_rect.midtop = (self.heightx + self.offset, self.heighty)
+                self.state = 'Height'
+            elif self.state == 'Height':
+                self.cursor_rect.midtop = (self.basex + self.offset, self.basey)
+                self.state = 'Base'
+
+
     def check_input(self):
+        self.move_cursor()
         if self.game.BACK_KEY:
             self.game.curr_menu = self.game.shapes_menu
             self.run_display = False
+
 
 class Circle(Menu):
     def __init__(self, game):
@@ -395,16 +399,31 @@ class Circle(Menu):
             self.game.display.fill((0, 0, 0))
             self.game.draw_text('Input the values', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 40)
             self.game.draw_text('Radius', 15, self.radiusx, self.radiusy )
-            self.game.draw_text('Press enter to calculate',15, self.calcx, self.calcy)
+            self.game.draw_text('Calculate',15, self.calcx-110, self.calcy)
             self.draw_cursor()
             self.blit_screen()   
-            
+
+    def move_cursor(self):
+        if self.game.DOWN_KEY:
+            if self.state == 'Radius':
+                self.cursor_rect.midtop = (self.calcx -130+ self.offset, self.calcy)
+                self.state = 'Calculate'
+            elif self.state == 'Calculate':
+                self.cursor_rect.midtop = (self.radiusx + self.offset, self.radiusy)
+                self.state = 'Radius'
+        elif self.game.UP_KEY:
+            if self.state == 'Radius':
+                self.cursor_rect.midtop = (self.calcx -130+ self.offset, self.calcy)
+                self.state = 'Calculate'
+            elif self.state == 'Calculate':
+                self.cursor_rect.midtop = (self.radiusx + self.offset, self.radiusy)
+                self.state = 'Radius'
 
 
     def check_input(self):
+        self.move_cursor()
         if self.game.BACK_KEY:
             self.game.curr_menu = self.game.shapes_menu
             self.run_display = False
-
 
 
