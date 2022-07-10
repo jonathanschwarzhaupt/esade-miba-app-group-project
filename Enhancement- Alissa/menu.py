@@ -2,7 +2,9 @@ from configparser import MAX_INTERPOLATION_DEPTH
 import pygame
 from pygame.rect import Rect
 
+"""Generic class to create all the menus in the game and windows"""
 class Menu():
+    """Method to display the menu"""
     def __init__(self, game):
         self.game = game
         self.mid_w, self.mid_h = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2
@@ -10,15 +12,17 @@ class Menu():
         self.cursor_rect = pygame.Rect(0, 0, 20, 20)
         self.offset = - 100
 
+    """Method to display the cursor"""
     def draw_cursor(self):
         self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y)
 
+    """Method to display the menu"""
     def blit_screen(self):
         self.game.window.blit(self.game.display, (0, 0))
         pygame.display.update()
         self.game.reset_keys()
 
-        
+    """Updating because pygame does not do it automatically""" 
     def update(self):
         width = max(180, self.txt_surface.get_width()+10)
         self.rect.width = width
@@ -26,7 +30,7 @@ class Menu():
     def draw(self,screen):
         screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
 
-
+"""Class to create the main menu"""
 class MainMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -37,6 +41,7 @@ class MainMenu(Menu):
         self.shapesx, self.shapesy = self.mid_w, self.mid_h + 90
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
 
+    """Method to display the different menus available"""
     def display_menu(self):
         self.run_display = True
         while self.run_display:
@@ -51,7 +56,7 @@ class MainMenu(Menu):
             self.draw_cursor()
             self.blit_screen()
 
-
+    """Method to display the allow the cursos to move up and down with arrows""" 
     def move_cursor(self):
         if self.game.DOWN_KEY:
             if self.state == 'Start':
@@ -80,7 +85,8 @@ class MainMenu(Menu):
             elif self.state == "Options":
                 self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
                 self.state = "Start"
-            
+     
+    """Method to move the cursor and send the user back to the appropriate menu if they press the start button"""       
     def check_input(self):
         self.move_cursor()
         if self.game.START_KEY:
@@ -94,6 +100,7 @@ class MainMenu(Menu):
                 self.game.curr_menu = self.game.shapes
             self.run_display = False
 
+"""Class to create the options menu"""
 class OptionsMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -113,7 +120,8 @@ class OptionsMenu(Menu):
             self.game.draw_text("Controls", 15, self.controlsx, self.controlsy)
             self.draw_cursor()
             self.blit_screen()
-
+    """Method to display the allow the cursos to move up and down with arrows"""
+    """No need for move_cursor() function because there are only 2 options"""
     def check_input(self):
         if self.game.BACK_KEY:
             self.game.curr_menu = self.game.main_menu
@@ -128,7 +136,7 @@ class OptionsMenu(Menu):
         elif self.game.START_KEY:
             pass
 
-
+"""Class to create the credits menu"""
 class CreditsMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -145,6 +153,7 @@ class CreditsMenu(Menu):
             self.game.draw_text('Made by Group K', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 10)
             self.blit_screen()
 
+"""Class to create the shapes menu"""
 class ShapesMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -155,6 +164,7 @@ class ShapesMenu(Menu):
         self.circlex, self.circley = self.mid_w, self.mid_h+70
         self.cursor_rect.midtop = (self.squarex + self.offset, self.squarey)
 
+    """Method to display the menu and the different shapes available to the user"""
     def display_menu(self):
         self.run_display = True
         while self.run_display:
@@ -172,6 +182,7 @@ class ShapesMenu(Menu):
             self.draw_cursor()
             self.blit_screen()
 
+    """Method to allow the user to navigate across the options with the keyboard arrows"""
     def move_cursor(self):
         if self.game.DOWN_KEY:
             if self.state == 'Square':
@@ -200,7 +211,8 @@ class ShapesMenu(Menu):
             elif self.state == "Rectangle":
                 self.cursor_rect.midtop = (self.squarex + self.offset, self.squarey)
                 self.state = "Square"
-  
+
+    """Method to check the input from the user and redirect them to the correct menu"""
     def check_input(self):
         self.move_cursor()
         if self.game.BACK_KEY:
@@ -217,7 +229,7 @@ class ShapesMenu(Menu):
                 self.game.curr_menu = self.game.circle
             self.run_display = False
 
-
+"""Class to create the square menu"""
 class Square(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -226,6 +238,7 @@ class Square(Menu):
         self.calcx, self.calcy = self.mid_w , self.mid_h +50
         self.cursor_rect.midtop = (self.sidex + self.offset, self.sidey)
 
+    """Method to display the menu and the values that need to be input for the calculation"""
     def display_menu(self):
         self.run_display = True
         while self.run_display:
@@ -240,7 +253,7 @@ class Square(Menu):
             self.game.draw_text('Calculate',15, self.calcx, self.calcy)
             self.draw_cursor()
             self.blit_screen()
-
+    """Method to allow the user to navigate across the options with the keyboard arrows"""
     def move_cursor(self):
         if self.game.DOWN_KEY:
             if self.state == 'Side':
@@ -257,7 +270,7 @@ class Square(Menu):
                 self.cursor_rect.midtop = (self.sidex + self.offset, self.sidey)
                 self.state = 'Side'
 
-
+    """Method to check the input from the user and redirect them to the correct menu"""
     def check_input(self):
         self.move_cursor()
         if self.game.BACK_KEY:
@@ -266,7 +279,7 @@ class Square(Menu):
 
 
     
-
+"""Class to create the rectangle menu"""
 class Rectangle(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -276,6 +289,7 @@ class Rectangle(Menu):
         self.calcx, self.calcy = self.mid_w-57, self.mid_h +80
         self.cursor_rect.midtop = (self.widthx + self.offset, self.widthy)
 
+    """Method to display the menu and the values that need to be input for the calculation"""
     def display_menu(self):
         self.run_display = True
         while self.run_display:
@@ -292,6 +306,7 @@ class Rectangle(Menu):
             self.draw_cursor()
             self.blit_screen()   
 
+    """Method to allow the user to navigate across the options with the keyboard arrows"""
     def move_cursor(self):
         if self.game.DOWN_KEY:
             if self.state == 'Width':
@@ -315,7 +330,7 @@ class Rectangle(Menu):
                 self.cursor_rect.midtop = (self.widthx + self.offset, self.widthy)
                 self.state = 'Width'
 
-
+    """Method to check the input from the user and redirect them to the correct menu"""
     def check_input(self):
         self.move_cursor()
         if self.game.BACK_KEY:
@@ -323,7 +338,7 @@ class Rectangle(Menu):
             self.run_display = False
 
 
-
+"""Class to create the triangle menu"""
 class Triangle(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -333,6 +348,7 @@ class Triangle(Menu):
         self.calcx, self.calcy = self.mid_w -80, self.mid_h +70
         self.cursor_rect.midtop = (self.basex + self.offset, self.basey)
 
+    """Method to display the menu and the values that need to be input for the calculation"""
     def display_menu(self):
         self.run_display = True
         while self.run_display:
@@ -349,6 +365,7 @@ class Triangle(Menu):
             self.draw_cursor()
             self.blit_screen()   
 
+    """Method to allow the user to navigate across the options with the keyboard arrows"""
     def move_cursor(self):
         if self.game.DOWN_KEY:
             if self.state == 'Base':
@@ -372,14 +389,14 @@ class Triangle(Menu):
                 self.cursor_rect.midtop = (self.basex + self.offset, self.basey)
                 self.state = 'Base'
 
-
+    """Method to check the input from the user and redirect them to the correct menu"""
     def check_input(self):
         self.move_cursor()
         if self.game.BACK_KEY:
             self.game.curr_menu = self.game.shapes_menu
             self.run_display = False
 
-
+"""Class to create the circle menu"""
 class Circle(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -388,6 +405,7 @@ class Circle(Menu):
         self.calcx, self.calcy = self.mid_w+50, self.mid_h +50
         self.cursor_rect.midtop = (self.radiusx + self.offset, self.radiusy)
 
+    """Method to display the menu and the values that need to be input for the calculation"""
     def display_menu(self):
         self.run_display = True
         while self.run_display:
@@ -403,6 +421,7 @@ class Circle(Menu):
             self.draw_cursor()
             self.blit_screen()   
 
+    """Method to allow the user to navigate across the options with the keyboard arrows"""
     def move_cursor(self):
         if self.game.DOWN_KEY:
             if self.state == 'Radius':
@@ -419,7 +438,7 @@ class Circle(Menu):
                 self.cursor_rect.midtop = (self.radiusx + self.offset, self.radiusy)
                 self.state = 'Radius'
 
-
+    """Method to check the input from the user and redirect them to the correct menu"""
     def check_input(self):
         self.move_cursor()
         if self.game.BACK_KEY:
